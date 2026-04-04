@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anki Gamify</title>
+  <title>Anki Gamify — Admin</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
  
@@ -17,82 +17,10 @@
  
     .container { max-width: 860px; margin: 0 auto; }
  
-    h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 6px;
-    }
-    .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 28px; }
+    h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 32px; }
  
-    /* ── Tabs ── */
-    .tabs {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 28px;
-      background: #1e2130;
-      border-radius: 12px;
-      padding: 6px;
-      width: fit-content;
-    }
-    .tab {
-      padding: 10px 22px;
-      border-radius: 8px;
-      font-size: 0.92rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: #64748b;
-      transition: all 0.2s;
-    }
-    .tab.active {
-      background: #4f46e5;
-      color: white;
-    }
-    .tab:hover:not(.active) { color: #e2e8f0; }
- 
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
- 
-    /* ── Cards ── */
-    .card {
-      background: #1e2130;
-      border: 1px solid #2d3148;
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-    .card h2 { font-size: 1rem; font-weight: 700; color: #c7d2fe; margin-bottom: 16px; }
- 
-    /* ── Success banner (public form) ── */
-    .success-banner {
-      display: none;
-      background: linear-gradient(135deg, #052e16, #14532d);
-      border: 1px solid #16a34a55;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-    .success-banner.visible { display: block; }
-    .success-banner h3 { color: #4ade80; font-size: 1.1rem; margin-bottom: 12px; }
-    .success-banner p { color: #86efac; font-size: 0.9rem; margin-bottom: 16px; }
-    .big-code {
-      font-family: 'Courier New', monospace;
-      font-size: 2rem;
-      font-weight: 900;
-      color: #4ade80;
-      letter-spacing: 6px;
-      background: #0f1117;
-      padding: 14px 24px;
-      border-radius: 10px;
-      border: 1px solid #16a34a44;
-      display: inline-block;
-      margin: 8px 0 16px;
-    }
- 
-    /* ── Invite banner (admin) ── */
+    /* ── Invite banner ── */
     .invite-banner {
       display: none;
       background: linear-gradient(135deg, #1e3a5f, #1a2a4a);
@@ -130,6 +58,16 @@
     .copy-btn.copied { background: #16a34a; }
     .invite-hint { color: #94a3b8; font-size: 0.83rem; margin-top: 10px; }
  
+    /* ── Cards ── */
+    .card {
+      background: #1e2130;
+      border: 1px solid #2d3148;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card h2 { font-size: 1rem; font-weight: 700; color: #c7d2fe; margin-bottom: 16px; }
+ 
     /* ── Form ── */
     .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
     .form-group { display: flex; flex-direction: column; flex: 1; min-width: 160px; }
@@ -162,19 +100,6 @@
     .btn-primary:hover { background: #4338ca; }
     .btn-primary:disabled { background: #374151; cursor: not-allowed; }
  
-    .btn-green {
-      background: #16a34a;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 22px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-green:hover { background: #15803d; }
- 
     .btn-danger {
       background: transparent;
       color: #f87171;
@@ -202,9 +127,10 @@
     }
     .group-item:hover { border-color: #4f46e577; }
     .group-item.active { border-color: #4f46e5; }
-    .group-name { font-weight: 600; flex: 1; cursor: pointer; }
-    .group-code { font-family: monospace; font-size: 0.85rem; color: #6366f1; background: #1e2130; padding: 3px 8px; border-radius: 5px; cursor: pointer; }
-    .group-count { color: #64748b; font-size: 0.82rem; cursor: pointer; }
+    .group-clickable { display: flex; align-items: center; gap: 12px; flex: 1; cursor: pointer; }
+    .group-name { font-weight: 600; flex: 1; }
+    .group-code { font-family: monospace; font-size: 0.85rem; color: #6366f1; background: #1e2130; padding: 3px 8px; border-radius: 5px; }
+    .group-count { color: #64748b; font-size: 0.82rem; }
  
     /* ── Members table ── */
     .members-section { display: none; }
@@ -220,11 +146,11 @@
       padding: 8px 12px;
       border-bottom: 1px solid #2d3148;
     }
-    td { padding: 10px 12px; border-bottom: 1px solid #1a1f35; font-size: 0.88rem; }
+    td { padding: 11px 12px; border-bottom: 1px solid #1a1f35; font-size: 0.9rem; }
     tr:last-child td { border-bottom: none; }
  
     .medal { font-size: 1.1rem; }
-    .xp-bar-wrap { background: #0f1117; border-radius: 99px; height: 6px; width: 80px; }
+    .xp-bar-wrap { background: #0f1117; border-radius: 99px; height: 6px; width: 100px; }
     .xp-bar-fill { background: linear-gradient(90deg, #6366f1, #a78bfa); border-radius: 99px; height: 6px; }
     .level-badge {
       background: #1e2130;
@@ -239,7 +165,7 @@
     .last-seen { color: #64748b; font-size: 0.78rem; }
  
     /* ── Messages ── */
-    .messages-list { max-height: 260px; overflow-y: auto; margin-bottom: 16px; }
+    .messages-list { max-height: 220px; overflow-y: auto; margin-bottom: 16px; }
     .msg-item {
       padding: 10px 14px;
       background: #0f1117;
@@ -277,55 +203,12 @@
     }
     .refresh-btn:hover { border-color: #4f46e5; color: #a5b4fc; }
  
-    .section-title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .section-title-row h2 { margin-bottom: 0; }
- 
-    /* ── Public hero ── */
-    .hero-desc {
-      color: #94a3b8;
-      font-size: 0.92rem;
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .step {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      font-size: 0.88rem;
-      color: #94a3b8;
-    }
-    .step-num {
-      background: #4f46e5;
-      color: white;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
- 
     /* ── Confirm dialog ── */
     .overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.75);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -336,12 +219,12 @@
       border: 1px solid #2d3148;
       border-radius: 16px;
       padding: 28px;
-      max-width: 380px;
+      max-width: 360px;
       width: 90%;
       text-align: center;
     }
-    .dialog h3 { color: #f87171; font-size: 1.1rem; margin-bottom: 12px; }
-    .dialog p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5; }
+    .dialog h3 { color: #f87171; font-size: 1.05rem; margin-bottom: 10px; }
+    .dialog p { color: #94a3b8; font-size: 0.88rem; margin-bottom: 22px; line-height: 1.5; }
     .dialog-btns { display: flex; gap: 10px; justify-content: center; }
     .btn-cancel {
       background: transparent;
@@ -369,134 +252,70 @@
 <body>
 <div class="container">
  
-  <h1>🎮 Anki Gamify</h1>
-  <p class="subtitle">Révisez ensemble, progressez ensemble.</p>
+  <h1>🎮 Anki Gamify — Admin</h1>
+  <p class="subtitle">Gérez vos groupes d'amis et suivez les stats en temps réel.</p>
  
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('public')">✨ Créer une team</button>
-    <button class="tab" onclick="switchTab('admin')">🛠️ Admin</button>
+  <!-- Invite banner -->
+  <div class="invite-banner" id="inviteBanner">
+    <h3>Code d'invitation</h3>
+    <div class="invite-code-row">
+      <div class="invite-code" id="displayCode">—</div>
+      <button class="copy-btn" id="copyBtn" onclick="copyCode()">📋 Copier le code</button>
+    </div>
+    <p class="invite-hint">Partage ce code à tes amis → ils le rentrent dans Settings de l'add-on Anki → ils rejoignent le groupe.</p>
   </div>
  
-  <!-- ═══════════════════════════════════════════ PUBLIC TAB -->
-  <div class="tab-panel active" id="tab-public">
- 
-    <!-- Success banner -->
-    <div class="success-banner" id="publicSuccess">
-      <h3>🎉 Team créée avec succès !</h3>
-      <p>Voici ton code d'invitation. Partage-le à tes amis — ils devront le rentrer dans l'add-on Anki.</p>
-      <div class="big-code" id="publicCreatedCode">—</div>
-      <br>
-      <button class="btn-green" onclick="copyPublicCode()">📋 Copier le code</button>
-      <div class="status ok" id="publicCopyStatus" style="margin-top:10px; text-align:center"></div>
-    </div>
- 
-    <div class="card">
-      <h2>🆕 Créer ma team</h2>
-      <p class="hero-desc">
-        Crée un groupe pour réviser avec tes amis. Choisis un nom et un code secret (mot de passe), puis partage ce code à tes amis — ils n'auront qu'à le rentrer dans les paramètres de l'add-on Anki.
-      </p>
-      <div class="form-row" style="margin-bottom: 12px;">
-        <div class="form-group">
-          <label>Nom de la team</label>
-          <input type="text" id="pubGroupName" placeholder="Ex: Médecine P3" />
-        </div>
-        <div class="form-group">
-          <label>Code secret (mot de passe)</label>
-          <input type="text" id="pubGroupCode" placeholder="Ex: MEDP3-2026" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
-        </div>
-        <button class="btn-primary" onclick="createPublicGroup()">Créer ✨</button>
+  <!-- Create group -->
+  <div class="card">
+    <h2>➕ Créer un groupe</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nom du groupe</label>
+        <input type="text" id="groupName" placeholder="Ex: Médecine P3" />
       </div>
-      <div class="status" id="pubCreateStatus"></div>
-    </div>
- 
-    <div class="card" style="border-color: #1e3a2f;">
-      <h2 style="color: #6ee7b7;">💡 Comment ça marche ?</h2>
-      <div class="steps">
-        <div class="step"><div class="step-num">1</div><div>Crée ta team ici avec un nom et un code secret de ton choix.</div></div>
-        <div class="step"><div class="step-num">2</div><div>Partage le code à tes amis par message.</div></div>
-        <div class="step"><div class="step-num">3</div><div>Chaque ami ouvre Anki → <strong style="color:#e2e8f0">Outils → Gamify Settings → onglet Groupe</strong>, active le mode groupe, entre son prénom et le code.</div></div>
-        <div class="step"><div class="step-num">4</div><div>Au prochain clic sur <strong style="color:#e2e8f0">Synchroniser</strong>, le classement apparaît sur l'écran d'accueil d'Anki !</div></div>
+      <div class="form-group">
+        <label>Code d'invitation</label>
+        <input type="text" id="groupCode" placeholder="Ex: MEDP3-2026" oninput="this.value=this.value.toUpperCase()" />
       </div>
+      <button class="btn-primary" onclick="createGroup()">Créer</button>
     </div>
- 
+    <div class="status" id="createStatus"></div>
   </div>
  
-  <!-- ═══════════════════════════════════════════ ADMIN TAB -->
-  <div class="tab-panel" id="tab-admin">
+  <!-- Groups list -->
+  <div class="card">
+    <h2>📋 Groupes existants <button class="refresh-btn" onclick="loadGroups()">↻ Rafraîchir</button></h2>
+    <div id="groupsList"><div class="empty">Chargement...</div></div>
+  </div>
  
-    <!-- Invite banner (shown when group selected) -->
-    <div class="invite-banner" id="inviteBanner">
-      <h3>Code d'invitation du groupe sélectionné</h3>
-      <div class="invite-code-row">
-        <div class="invite-code" id="displayCode">—</div>
-        <button class="copy-btn" id="copyBtn" onclick="copyCode()">📋 Copier le code</button>
-      </div>
-      <p class="invite-hint">Partage ce code à tes amis → ils le rentrent dans Settings de l'add-on Anki → ils rejoignent le groupe.</p>
-    </div>
- 
-    <!-- Create group (admin) -->
+  <!-- Members + messages -->
+  <div class="members-section" id="membersSection">
     <div class="card">
-      <h2>➕ Créer un groupe</h2>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nom du groupe</label>
-          <input type="text" id="groupName" placeholder="Ex: Médecine P3" />
-        </div>
-        <div class="form-group">
-          <label>Code d'invitation</label>
-          <input type="text" id="groupCode" placeholder="Ex: MEDP3-2026" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
-        </div>
-        <button class="btn-primary" onclick="createGroup()">Créer</button>
-      </div>
-      <div class="status" id="createStatus"></div>
+      <h2>🏆 Classement — <span id="groupTitle">—</span> <button class="refresh-btn" onclick="loadMembers()">↻</button></h2>
+      <div id="membersTable"><div class="empty">Sélectionnez un groupe</div></div>
     </div>
- 
-    <!-- Groups list -->
     <div class="card">
-      <div class="section-title-row">
-        <h2>📋 Groupes existants</h2>
-        <button class="refresh-btn" onclick="loadGroups()">↻ Rafraîchir</button>
+      <h2>💬 Messages du groupe <button class="refresh-btn" onclick="loadMessages()">↻</button></h2>
+      <div class="messages-list" id="messagesList"><div class="empty">Aucun message</div></div>
+      <div class="msg-form">
+        <input type="text" id="msgFrom" placeholder="Votre prénom" style="max-width:140px" />
+        <input type="text" id="msgText" placeholder="Message d'encouragement..." onkeydown="if(event.key==='Enter')sendMessage()" />
+        <button class="btn-primary" onclick="sendMessage()">Envoyer</button>
       </div>
-      <div id="groupsList"><div class="empty">Chargement...</div></div>
+      <div class="status" id="msgStatus"></div>
     </div>
+  </div>
  
-    <!-- Members + messages (shown when group selected) -->
-    <div class="members-section" id="membersSection">
-      <div class="card">
-        <div class="section-title-row">
-          <h2>🏆 Classement — <span id="groupTitle">—</span></h2>
-          <button class="refresh-btn" onclick="loadMembers()">↻</button>
-        </div>
-        <div id="membersTable"><div class="empty">Sélectionnez un groupe</div></div>
-      </div>
-      <div class="card">
-        <div class="section-title-row">
-          <h2>💬 Messages du groupe</h2>
-          <button class="refresh-btn" onclick="loadMessages()">↻</button>
-        </div>
-        <div class="messages-list" id="messagesList"><div class="empty">Aucun message</div></div>
-        <div class="msg-form">
-          <input type="text" id="msgFrom" placeholder="Votre prénom" style="max-width:140px" />
-          <input type="text" id="msgText" placeholder="Message d'encouragement..." onkeydown="if(event.key==='Enter')sendMessage()" />
-          <button class="btn-primary" onclick="sendMessage()">Envoyer</button>
-        </div>
-        <div class="status" id="msgStatus"></div>
-      </div>
-    </div>
+</div>
  
-  </div><!-- end admin tab -->
- 
-</div><!-- end container -->
- 
-<!-- ── Confirm dialog ── -->
+<!-- Confirm dialog -->
 <div class="overlay" id="confirmOverlay">
   <div class="dialog">
     <h3 id="confirmTitle">Supprimer ?</h3>
     <p id="confirmMsg">Cette action est irréversible.</p>
     <div class="dialog-btns">
       <button class="btn-cancel" onclick="hideConfirm()">Annuler</button>
-      <button class="btn-confirm-delete" id="confirmOkBtn" onclick="confirmAction()">Supprimer</button>
+      <button class="btn-confirm-delete" onclick="runConfirm()">Supprimer</button>
     </div>
   </div>
 </div>
@@ -507,85 +326,50 @@
  
   let selectedGroupId = null;
   let selectedGroupCode = null;
-  let pendingAction = null; // { fn, args }
+  let pendingFn = null;
  
-  const headers = {
+  const readHeaders = {
     'apikey': SUPABASE_KEY,
     'Authorization': 'Bearer ' + SUPABASE_KEY,
     'Content-Type': 'application/json',
     'Prefer': 'return=representation'
   };
+  const deleteHeaders = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': 'Bearer ' + SUPABASE_KEY,
+    'Content-Type': 'application/json'
+  };
  
   async function api(method, path, body = null) {
-    const opts = { method, headers };
+    const isDelete = method === 'DELETE';
+    const opts = { method, headers: isDelete ? deleteHeaders : readHeaders };
     if (body) opts.body = JSON.stringify(body);
     const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, opts);
-    if (!r.ok) throw new Error(await r.text());
-    return r.status === 204 ? null : r.json();
+    if (!r.ok) {
+      const txt = await r.text();
+      throw new Error(txt);
+    }
+    if (r.status === 204 || isDelete) return null;
+    return r.json();
   }
  
-  // ── Tab switching ──────────────────────────────────────────────
-  function switchTab(name) {
-    document.querySelectorAll('.tab').forEach((t, i) => {
-      t.classList.toggle('active', ['public','admin'][i] === name);
-    });
-    document.querySelectorAll('.tab-panel').forEach(p => {
-      p.classList.toggle('active', p.id === 'tab-' + name);
-    });
-    if (name === 'admin') loadGroups();
-  }
- 
-  // ── Confirm dialog ─────────────────────────────────────────────
+  // ── Confirm dialog ────────────────────────────────────────────
   function showConfirm(title, msg, fn) {
     document.getElementById('confirmTitle').textContent = title;
     document.getElementById('confirmMsg').textContent = msg;
-    pendingAction = fn;
+    pendingFn = fn;
     document.getElementById('confirmOverlay').classList.add('visible');
   }
   function hideConfirm() {
     document.getElementById('confirmOverlay').classList.remove('visible');
-    pendingAction = null;
+    pendingFn = null;
   }
-  function confirmAction() {
+  function runConfirm() {
     hideConfirm();
-    if (pendingAction) pendingAction();
+    if (pendingFn) pendingFn();
   }
  
-  // ── PUBLIC: Create group ───────────────────────────────────────
-  async function createPublicGroup() {
-    const name = document.getElementById('pubGroupName').value.trim();
-    const code = document.getElementById('pubGroupCode').value.trim().toUpperCase();
-    const st = document.getElementById('pubCreateStatus');
-    if (!name || !code) { st.textContent = '⚠️ Remplis les deux champs.'; st.className = 'status err'; return; }
-    if (code.length < 3) { st.textContent = '⚠️ Le code doit faire au moins 3 caractères.'; st.className = 'status err'; return; }
- 
-    st.textContent = 'Création...'; st.className = 'status';
-    try {
-      await api('POST', 'groups', { name, invite_code: code });
-      st.textContent = ''; st.className = 'status';
-      document.getElementById('pubGroupName').value = '';
-      document.getElementById('pubGroupCode').value = '';
-      document.getElementById('publicCreatedCode').textContent = code;
-      document.getElementById('publicSuccess').classList.add('visible');
-      document.getElementById('publicCopyStatus').textContent = '';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch(e) {
-      st.textContent = '❌ ' + (e.message.includes('unique') ? 'Ce code est déjà pris, choisis-en un autre.' : 'Erreur : ' + e.message);
-      st.className = 'status err';
-    }
-  }
- 
-  function copyPublicCode() {
-    const code = document.getElementById('publicCreatedCode').textContent;
-    if (!code || code === '—') return;
-    navigator.clipboard.writeText(code).then(() => {
-      const st = document.getElementById('publicCopyStatus');
-      st.textContent = '✅ Code copié dans le presse-papier !';
-      setTimeout(() => st.textContent = '', 3000);
-    });
-  }
- 
-  // ── ADMIN: Create group ────────────────────────────────────────
+  // ── Create group ──────────────────────────────────────────────
   async function createGroup() {
     const name = document.getElementById('groupName').value.trim();
     const code = document.getElementById('groupCode').value.trim().toUpperCase();
@@ -605,31 +389,26 @@
     }
   }
  
-  // ── ADMIN: Delete group ────────────────────────────────────────
+  // ── Delete group ──────────────────────────────────────────────
   function promptDeleteGroup(id, name) {
     showConfirm(
-      '🗑️ Supprimer la team ?',
-      `Supprimer "${name}" supprimera aussi tous ses membres et messages. Action irréversible.`,
-      () => deleteGroup(id, name)
-    );
-  }
- 
-  async function deleteGroup(id, name) {
-    try {
-      // Delete messages, then users, then group
-      await api('DELETE', `messages?group_id=eq.${id}`);
-      await api('DELETE', `users?group_id=eq.${id}`);
-      await api('DELETE', `groups?id=eq.${id}`);
-      if (selectedGroupId === id) {
-        selectedGroupId = null;
-        selectedGroupCode = null;
-        document.getElementById('membersSection').classList.remove('visible');
-        document.getElementById('inviteBanner').classList.remove('visible');
+      '🗑️ Supprimer ce groupe ?',
+      `"${name}" et tous ses membres et messages seront supprimés définitivement.`,
+      async () => {
+        try {
+          await api('DELETE', `messages?group_id=eq.${id}`);
+          await api('DELETE', `screamers?group_id=eq.${id}`);
+          await api('DELETE', `users?group_id=eq.${id}`);
+          await api('DELETE', `groups?id=eq.${id}`);
+          if (selectedGroupId === id) {
+            selectedGroupId = null; selectedGroupCode = null;
+            document.getElementById('membersSection').classList.remove('visible');
+            document.getElementById('inviteBanner').classList.remove('visible');
+          }
+          loadGroups();
+        } catch(e) { alert('Erreur : ' + e.message); }
       }
-      loadGroups();
-    } catch(e) {
-      alert('Erreur lors de la suppression : ' + e.message);
-    }
+    );
   }
  
   // ── Load groups ───────────────────────────────────────────────
@@ -647,9 +426,11 @@
  
       el.innerHTML = groups.map(g => `
         <div class="group-item ${g.id === selectedGroupId ? 'active' : ''}">
-          <span class="group-name" onclick="selectGroup('${g.id}','${esc(g.name)}','${g.invite_code}')">${esc(g.name)}</span>
-          <span class="group-code" onclick="selectGroup('${g.id}','${esc(g.name)}','${g.invite_code}')">${g.invite_code}</span>
-          <span class="group-count" onclick="selectGroup('${g.id}','${esc(g.name)}','${g.invite_code}')">${counts[g.id] || 0} membre(s)</span>
+          <div class="group-clickable" onclick="selectGroup('${g.id}','${esc(g.name)}','${g.invite_code}')">
+            <span class="group-name">${esc(g.name)}</span>
+            <span class="group-code">${g.invite_code}</span>
+            <span class="group-count">${counts[g.id] || 0} membre(s)</span>
+          </div>
           <button class="btn-danger" onclick="promptDeleteGroup('${g.id}','${esc(g.name)}')">🗑️ Supprimer</button>
         </div>
       `).join('');
@@ -686,7 +467,7 @@
           <thead>
             <tr>
               <th>#</th><th>Joueur</th><th>Niveau</th><th>XP</th>
-              <th>Streak</th><th>Cartes auj.</th><th>Cartes sem.</th><th>Dernière sync</th><th></th>
+              <th>Record streak</th><th>Cartes auj.</th><th>Cartes sem.</th><th>Dernière sync</th><th></th>
             </tr>
           </thead>
           <tbody>
@@ -721,18 +502,12 @@
   function promptDeleteMember(id, name) {
     showConfirm(
       '🗑️ Supprimer ce membre ?',
-      `Supprimer "${name}" du groupe. Il pourra rejoindre à nouveau en synchronisant Anki.`,
-      () => deleteMember(id)
+      `"${name}" sera retiré du groupe. Il pourra rejoindre à nouveau en synchronisant Anki.`,
+      async () => {
+        try { await api('DELETE', `users?id=eq.${id}`); loadMembers(); }
+        catch(e) { alert('Erreur : ' + e.message); }
+      }
     );
-  }
- 
-  async function deleteMember(id) {
-    try {
-      await api('DELETE', `users?id=eq.${id}`);
-      loadMembers();
-    } catch(e) {
-      alert('Erreur : ' + e.message);
-    }
   }
  
   // ── Messages ──────────────────────────────────────────────────
@@ -740,7 +515,7 @@
     const el = document.getElementById('messagesList');
     if (!selectedGroupId) return;
     try {
-      const msgs = await api('GET', `messages?group_id=eq.${selectedGroupId}&order=created_at.desc&limit=30`);
+      const msgs = await api('GET', `messages?group_id=eq.${selectedGroupId}&order=created_at.desc&limit=20`);
       if (!msgs.length) { el.innerHTML = '<div class="empty">Aucun message.</div>'; return; }
       el.innerHTML = msgs.reverse().map(m => `
         <div class="msg-item">
@@ -749,7 +524,7 @@
             <span class="msg-time"> · ${formatTime(m.created_at)}</span>
             <div class="msg-text">${esc(m.text)}</div>
           </div>
-          <button class="btn-danger" onclick="promptDeleteMessage('${m.id}')" style="flex-shrink:0;margin-top:2px">🗑️</button>
+          <button class="btn-danger" onclick="promptDeleteMsg('${m.id}')">🗑️</button>
         </div>
       `).join('');
       el.scrollTop = el.scrollHeight;
@@ -758,22 +533,15 @@
     }
   }
  
-  // ── Delete message ────────────────────────────────────────────
-  function promptDeleteMessage(id) {
+  function promptDeleteMsg(id) {
     showConfirm(
       '🗑️ Supprimer ce message ?',
       'Ce message sera définitivement supprimé.',
-      () => deleteMessage(id)
+      async () => {
+        try { await api('DELETE', `messages?id=eq.${id}`); loadMessages(); }
+        catch(e) { alert('Erreur : ' + e.message); }
+      }
     );
-  }
- 
-  async function deleteMessage(id) {
-    try {
-      await api('DELETE', `messages?id=eq.${id}`);
-      loadMessages();
-    } catch(e) {
-      alert('Erreur : ' + e.message);
-    }
   }
  
   async function sendMessage() {
@@ -812,11 +580,8 @@
     const now = new Date();
     const hh = String(d.getHours()).padStart(2,'0');
     const mm = String(d.getMinutes()).padStart(2,'0');
-    const sameDay = d.toDateString() === now.toDateString();
-    if (sameDay) return hh + ':' + mm;
-    const dd = String(d.getDate()).padStart(2,'0');
-    const mo = String(d.getMonth()+1).padStart(2,'0');
-    return dd + '/' + mo + ' ' + hh + ':' + mm;
+    if (d.toDateString() === now.toDateString()) return hh + ':' + mm;
+    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + ' ' + hh + ':' + mm;
   }
  
   function copyCode() {
@@ -829,9 +594,8 @@
   }
  
   // ── Init ──────────────────────────────────────────────────────
-  // Auto-refresh members every 30s if a group is selected
+  loadGroups();
   setInterval(() => { if (selectedGroupId) { loadMembers(); loadMessages(); } }, 30000);
 </script>
 </body>
 </html>
- 
