@@ -365,9 +365,11 @@
     pendingFn = null;
   }
   function runConfirm() {
-    hideConfirm();
-    if (pendingFn) pendingFn();
-  }
+  const fn = pendingFn;
+  hideConfirm();
+  if (fn) fn();
+}
+
  
   // ── Create group ──────────────────────────────────────────────
   async function createGroup() {
