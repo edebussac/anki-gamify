@@ -490,7 +490,7 @@
                 <td>${m.cards_today}</td>
                 <td>${m.cards_week}</td>
                 <td class="last-seen">${lastSeen}</td>
-                <td><button class="btn-danger" onclick="promptDeleteMember('${m.id}','${esc(m.display_name)}')">🗑️</button></td>
+                <td><button class="btn-danger" data-id="${m.id}" data-name="${esc(m.display_name)}" onclick="promptDeleteMember(this.dataset.id,this.dataset.name)">🗑️</button></td>
               </tr>`;
             }).join('')}
           </tbody>
