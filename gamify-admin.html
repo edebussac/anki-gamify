@@ -6,7 +6,7 @@
   <title>Anki Gamify — Admin</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #0f1117;
@@ -14,12 +14,12 @@
       min-height: 100vh;
       padding: 32px 16px;
     }
- 
+
     .container { max-width: 860px; margin: 0 auto; }
- 
+
     h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
     .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 32px; }
- 
+
     /* ── Invite banner ── */
     .invite-banner {
       display: none;
@@ -57,7 +57,7 @@
     .copy-btn:hover { background: #1d4ed8; }
     .copy-btn.copied { background: #16a34a; }
     .invite-hint { color: #94a3b8; font-size: 0.83rem; margin-top: 10px; }
- 
+
     /* ── Cards ── */
     .card {
       background: #1e2130;
@@ -67,7 +67,7 @@
       margin-bottom: 24px;
     }
     .card h2 { font-size: 1rem; font-weight: 700; color: #c7d2fe; margin-bottom: 16px; }
- 
+
     /* ── Form ── */
     .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
     .form-group { display: flex; flex-direction: column; flex: 1; min-width: 160px; }
@@ -83,7 +83,7 @@
       transition: border-color 0.2s;
     }
     input[type="text"]:focus { border-color: #4f46e5; }
- 
+
     .btn-primary {
       background: #4f46e5;
       color: white;
@@ -99,7 +99,7 @@
     }
     .btn-primary:hover { background: #4338ca; }
     .btn-primary:disabled { background: #374151; cursor: not-allowed; }
- 
+
     .btn-danger {
       background: transparent;
       color: #f87171;
@@ -112,7 +112,7 @@
       white-space: nowrap;
     }
     .btn-danger:hover { background: #7f1d1d33; border-color: #f87171; }
- 
+
     /* ── Groups list ── */
     .group-item {
       display: flex;
@@ -131,11 +131,11 @@
     .group-name { font-weight: 600; flex: 1; }
     .group-code { font-family: monospace; font-size: 0.85rem; color: #6366f1; background: #1e2130; padding: 3px 8px; border-radius: 5px; }
     .group-count { color: #64748b; font-size: 0.82rem; }
- 
+
     /* ── Members table ── */
     .members-section { display: none; }
     .members-section.visible { display: block; }
- 
+
     table { width: 100%; border-collapse: collapse; }
     th {
       text-align: left;
@@ -148,7 +148,7 @@
     }
     td { padding: 11px 12px; border-bottom: 1px solid #1a1f35; font-size: 0.9rem; }
     tr:last-child td { border-bottom: none; }
- 
+
     .medal { font-size: 1.1rem; }
     .xp-bar-wrap { background: #0f1117; border-radius: 99px; height: 6px; width: 100px; }
     .xp-bar-fill { background: linear-gradient(90deg, #6366f1, #a78bfa); border-radius: 99px; height: 6px; }
@@ -163,7 +163,7 @@
     }
     .streak { color: #f97316; font-weight: 700; }
     .last-seen { color: #64748b; font-size: 0.78rem; }
- 
+
     /* ── Messages ── */
     .messages-list { max-height: 220px; overflow-y: auto; margin-bottom: 16px; }
     .msg-item {
@@ -182,14 +182,14 @@
     .msg-text { margin-top: 3px; word-break: break-word; }
     .msg-form { display: flex; gap: 10px; }
     .msg-form input { flex: 1; }
- 
+
     /* ── Status ── */
     .status { font-size: 0.82rem; color: #64748b; margin-top: 8px; min-height: 18px; }
     .status.ok { color: #4ade80; }
     .status.err { color: #f87171; }
- 
+
     .empty { color: #475569; text-align: center; padding: 20px; font-size: 0.88rem; }
- 
+
     .refresh-btn {
       background: none;
       border: 1px solid #2d3148;
@@ -202,7 +202,7 @@
       transition: border-color 0.2s;
     }
     .refresh-btn:hover { border-color: #4f46e5; color: #a5b4fc; }
- 
+
     /* ── Confirm dialog ── */
     .overlay {
       display: none;
@@ -251,10 +251,10 @@
 </head>
 <body>
 <div class="container">
- 
+
   <h1>🎮 Anki Gamify — Admin</h1>
   <p class="subtitle">Gérez vos groupes d'amis et suivez les stats en temps réel.</p>
- 
+
   <!-- Invite banner -->
   <div class="invite-banner" id="inviteBanner">
     <h3>Code d'invitation</h3>
@@ -264,7 +264,7 @@
     </div>
     <p class="invite-hint">Partage ce code à tes amis → ils le rentrent dans Settings de l'add-on Anki → ils rejoignent le groupe.</p>
   </div>
- 
+
   <!-- Create group -->
   <div class="card">
     <h2>➕ Créer un groupe</h2>
@@ -273,21 +273,17 @@
         <label>Nom du groupe</label>
         <input type="text" id="groupName" placeholder="Ex: Médecine P3" />
       </div>
-      <div class="form-group">
-        <label>Code d'invitation</label>
-        <input type="text" id="groupCode" placeholder="Ex: MEDP3-2026" oninput="this.value=this.value.toUpperCase()" />
-      </div>
       <button class="btn-primary" onclick="createGroup()">Créer</button>
     </div>
     <div class="status" id="createStatus"></div>
   </div>
- 
+
   <!-- Groups list -->
   <div class="card">
     <h2>📋 Groupes existants <button class="refresh-btn" onclick="loadGroups()">↻ Rafraîchir</button></h2>
     <div id="groupsList"><div class="empty">Chargement...</div></div>
   </div>
- 
+
   <!-- Members + messages -->
   <div class="members-section" id="membersSection">
     <div class="card">
@@ -305,9 +301,9 @@
       <div class="status" id="msgStatus"></div>
     </div>
   </div>
- 
+
 </div>
- 
+
 <!-- Confirm dialog -->
 <div class="overlay" id="confirmOverlay">
   <div class="dialog">
@@ -319,15 +315,15 @@
     </div>
   </div>
 </div>
- 
+
 <script>
   const SUPABASE_URL = 'https://xowuddjtaopezoezkbtq.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhvd3VkZGp0YW9wZXpvZXprYnRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMzE3NzksImV4cCI6MjA5MDgwNzc3OX0.nlZtBBaphrPrLsoa_ahMs3897ZQhvCRIB0l6I2RH9dU';
- 
+
   let selectedGroupId = null;
   let selectedGroupCode = null;
   let pendingFn = null;
- 
+
   const readHeaders = {
     'apikey': SUPABASE_KEY,
     'Authorization': 'Bearer ' + SUPABASE_KEY,
@@ -339,7 +335,7 @@
     'Authorization': 'Bearer ' + SUPABASE_KEY,
     'Content-Type': 'application/json'
   };
- 
+
   async function api(method, path, body = null) {
     const isDelete = method === 'DELETE';
     const opts = { method, headers: isDelete ? deleteHeaders : readHeaders };
@@ -352,7 +348,7 @@
     if (r.status === 204 || isDelete) return null;
     return r.json();
   }
- 
+
   // ── Confirm dialog ────────────────────────────────────────────
   function showConfirm(title, msg, fn) {
     document.getElementById('confirmTitle').textContent = title;
@@ -364,33 +360,54 @@
     document.getElementById('confirmOverlay').classList.remove('visible');
     pendingFn = null;
   }
-  function runConfirm() {
-  const fn = pendingFn;
-  hideConfirm();
-  if (fn) fn();
-}
+  async function runConfirm() {
+    hideConfirm();
+    if (pendingFn) {
+      try { await pendingFn(); }
+      catch(e) { showError('Erreur lors de la suppression : ' + e.message); }
+    }
+  }
 
- 
+  function showError(msg) {
+    let el = document.getElementById('globalError');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'globalError';
+      el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#7f1d1d;color:#fca5a5;border:1px solid #f87171;border-radius:10px;padding:14px 22px;font-size:0.9rem;z-index:999;max-width:480px;text-align:center;';
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 6000);
+  }
+
   // ── Create group ──────────────────────────────────────────────
+  function generateCode() {
+    const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const arr = new Uint8Array(10);
+    crypto.getRandomValues(arr);
+    const chars = Array.from(arr, b => alpha[b % alpha.length]);
+    return chars.slice(0,5).join('') + '-' + chars.slice(5,10).join('');
+  }
+
   async function createGroup() {
     const name = document.getElementById('groupName').value.trim();
-    const code = document.getElementById('groupCode').value.trim().toUpperCase();
     const st = document.getElementById('createStatus');
-    if (!name || !code) { st.textContent = '⚠️ Remplis les deux champs.'; st.className = 'status err'; return; }
- 
+    if (!name) { st.textContent = '⚠️ Donne un nom au groupe.'; st.className = 'status err'; return; }
+    const code = generateCode();
+
     st.textContent = 'Création...'; st.className = 'status';
     try {
       await api('POST', 'groups', { name, invite_code: code });
-      st.textContent = `✅ Groupe "${name}" créé !`; st.className = 'status ok';
+      st.textContent = `✅ Groupe "${name}" créé ! Code : ${code}`; st.className = 'status ok';
       document.getElementById('groupName').value = '';
-      document.getElementById('groupCode').value = '';
       loadGroups();
     } catch(e) {
-      st.textContent = '❌ ' + (e.message.includes('unique') ? 'Ce code existe déjà.' : e.message);
+      st.textContent = '❌ ' + e.message;
       st.className = 'status err';
     }
   }
- 
+
   // ── Delete group ──────────────────────────────────────────────
   function promptDeleteGroup(id, name) {
     showConfirm(
@@ -408,24 +425,24 @@
             document.getElementById('inviteBanner').classList.remove('visible');
           }
           loadGroups();
-        } catch(e) { alert('Erreur : ' + e.message); }
+        } catch(e) { showError('Erreur : ' + e.message); }
       }
     );
   }
- 
+
   // ── Load groups ───────────────────────────────────────────────
   async function loadGroups() {
     const el = document.getElementById('groupsList');
     try {
       const groups = await api('GET', 'groups?order=created_at.asc&select=id,name,invite_code');
       if (!groups.length) { el.innerHTML = '<div class="empty">Aucun groupe. Crée-en un ci-dessus !</div>'; return; }
- 
+
       const counts = {};
       try {
         const users = await api('GET', 'users?select=group_id');
         users.forEach(u => { counts[u.group_id] = (counts[u.group_id] || 0) + 1; });
       } catch(_) {}
- 
+
       el.innerHTML = groups.map(g => `
         <div class="group-item ${g.id === selectedGroupId ? 'active' : ''}">
           <div class="group-clickable" onclick="selectGroup('${g.id}','${esc(g.name)}','${g.invite_code}')">
@@ -440,7 +457,7 @@
       el.innerHTML = `<div class="empty" style="color:#f87171">Erreur de chargement : ${e.message}</div>`;
     }
   }
- 
+
   // ── Select group ──────────────────────────────────────────────
   function selectGroup(id, name, code) {
     selectedGroupId = id;
@@ -453,7 +470,7 @@
     loadMembers();
     loadMessages();
   }
- 
+
   // ── Load members ──────────────────────────────────────────────
   async function loadMembers() {
     const el = document.getElementById('membersTable');
@@ -462,35 +479,42 @@
     try {
       const members = await api('GET', `users?group_id=eq.${selectedGroupId}&order=xp_total.desc`);
       if (!members.length) { el.innerHTML = '<div class="empty">Aucun membre pour l\'instant.</div>'; return; }
- 
+
+      function xpForLevel(lvl) { return lvl <= 1 ? 0 : (lvl-1)*(290+5*lvl)/2; }
+      function xpToNext(lvl)   { return 150 + 5*(lvl-1); }
+
       const medals = ['🥇','🥈','🥉'];
       el.innerHTML = `
         <table>
           <thead>
             <tr>
               <th>#</th><th>Joueur</th><th>Niveau</th><th>XP</th>
-              <th>Record streak</th><th>Cartes auj.</th><th>Cartes sem.</th><th>Dernière sync</th><th></th>
+              <th>🔥 Jours</th><th>⚡ Streak cartes</th><th>Cartes auj.</th><th>Cartes sem.</th><th>Dernière sync</th><th></th>
             </tr>
           </thead>
           <tbody>
             ${members.map((m, i) => {
-              const xpInLevel = m.xp_total % 100;
+              const lvl = m.level || 1;
+              const xpIn  = m.xp_total - xpForLevel(lvl);
+              const xpNxt = xpToNext(lvl);
+              const xpPct = Math.min(100, Math.round(xpIn / xpNxt * 100));
               const lastSeen = m.last_sync ? timeSince(new Date(m.last_sync)) : '?';
               return `<tr>
                 <td><span class="medal">${medals[i] || (i+1)}</span></td>
                 <td><strong>${esc(m.display_name)}</strong></td>
-                <td><span class="level-badge">Niv. ${m.level}</span></td>
+                <td><span class="level-badge">Niv. ${lvl}</span></td>
                 <td>
                   <div>${m.xp_total} XP</div>
                   <div class="xp-bar-wrap" style="margin-top:4px">
-                    <div class="xp-bar-fill" style="width:${xpInLevel}%"></div>
+                    <div class="xp-bar-fill" style="width:${xpPct}%"></div>
                   </div>
                 </td>
-                <td><span class="streak">🔥 ${m.streak_peak}j</span></td>
+                <td><span style="color:#f97316;font-weight:700">${m.daily_streak ?? 0}j</span></td>
+                <td><span style="color:#facc15;font-weight:700">${m.streak_peak ?? 0}</span></td>
                 <td>${m.cards_today}</td>
                 <td>${m.cards_week}</td>
                 <td class="last-seen">${lastSeen}</td>
-                <td><button class="btn-danger" data-id="${m.id}" data-name="${esc(m.display_name)}" onclick="promptDeleteMember(this.dataset.id,this.dataset.name)">🗑️</button></td>
+                <td><button class="btn-danger" onclick="promptDeleteMember('${m.id}','${esc(m.display_name)}')">🗑️</button></td>
               </tr>`;
             }).join('')}
           </tbody>
@@ -499,7 +523,7 @@
       el.innerHTML = `<div class="empty" style="color:#f87171">Erreur : ${e.message}</div>`;
     }
   }
- 
+
   // ── Delete member ─────────────────────────────────────────────
   function promptDeleteMember(id, name) {
     showConfirm(
@@ -507,11 +531,11 @@
       `"${name}" sera retiré du groupe. Il pourra rejoindre à nouveau en synchronisant Anki.`,
       async () => {
         try { await api('DELETE', `users?id=eq.${id}`); loadMembers(); }
-        catch(e) { alert('Erreur : ' + e.message); }
+        catch(e) { showError('Erreur : ' + e.message); }
       }
     );
   }
- 
+
   // ── Messages ──────────────────────────────────────────────────
   async function loadMessages() {
     const el = document.getElementById('messagesList');
@@ -534,18 +558,18 @@
       el.innerHTML = `<div class="empty" style="color:#f87171">Erreur : ${e.message}</div>`;
     }
   }
- 
+
   function promptDeleteMsg(id) {
     showConfirm(
       '🗑️ Supprimer ce message ?',
       'Ce message sera définitivement supprimé.',
       async () => {
         try { await api('DELETE', `messages?id=eq.${id}`); loadMessages(); }
-        catch(e) { alert('Erreur : ' + e.message); }
+        catch(e) { showError('Erreur : ' + e.message); }
       }
     );
   }
- 
+
   async function sendMessage() {
     const from = document.getElementById('msgFrom').value.trim();
     const text = document.getElementById('msgText').value.trim();
@@ -562,12 +586,12 @@
       st.textContent = '❌ ' + e.message; st.className = 'status err';
     }
   }
- 
+
   // ── Helpers ───────────────────────────────────────────────────
   function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');
   }
- 
+
   function timeSince(date) {
     const s = Math.floor((new Date() - date) / 1000);
     if (s < 60) return 'À l\'instant';
@@ -575,7 +599,7 @@
     if (s < 86400) return Math.floor(s/3600) + 'h';
     return Math.floor(s/86400) + 'j';
   }
- 
+
   function formatTime(iso) {
     if (!iso) return '?';
     const d = new Date(iso);
@@ -585,7 +609,7 @@
     if (d.toDateString() === now.toDateString()) return hh + ':' + mm;
     return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + ' ' + hh + ':' + mm;
   }
- 
+
   function copyCode() {
     if (!selectedGroupCode) return;
     navigator.clipboard.writeText(selectedGroupCode).then(() => {
@@ -594,7 +618,7 @@
       setTimeout(() => { btn.textContent = '📋 Copier le code'; btn.classList.remove('copied'); }, 2000);
     });
   }
- 
+
   // ── Init ──────────────────────────────────────────────────────
   loadGroups();
   setInterval(() => { if (selectedGroupId) { loadMembers(); loadMessages(); } }, 30000);
