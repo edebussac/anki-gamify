@@ -361,9 +361,10 @@
     pendingFn = null;
   }
   async function runConfirm() {
+    const fn = pendingFn;
     hideConfirm();
-    if (pendingFn) {
-      try { await pendingFn(); }
+    if (fn) {
+      try { await fn(); }
       catch(e) { showError('Erreur lors de la suppression : ' + e.message); }
     }
   }
@@ -409,16 +410,30 @@
   }
 
   // ── Delete group ──────────────────────────────────────────────
+  async function apiDelete(path) {
+    const opts = { method: 'DELETE', headers: deleteHeaders };
+    const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, opts);
+    if (!r.ok) { const txt = await r.text(); throw new Error(txt); }
+  }
+
   function promptDeleteGroup(id, name) {
     showConfirm(
       '🗑️ Supprimer ce groupe ?',
       `"${name}" et tous ses membres et messages seront supprimés définitivement.`,
       async () => {
         try {
-          await api('DELETE', `messages?group_id=eq.${id}`);
-          await api('DELETE', `screamers?group_id=eq.${id}`);
-          await api('DELETE', `users?group_id=eq.${id}`);
-          await api('DELETE', `groups?id=eq.${id}`);
+          await apiDelete(`messages?group_id=eq.${id}`);
+          await apiDelete(`screamers?group_id=eq.${id}`);
+          await apiDelete(`users?group_id=eq.${id}`);
+          await apiDelete(`groups?id=eq.${id}`);
+
+          // Vérification : le groupe existe-t-il encore ?
+          const check = await api('GET', `groups?id=eq.${id}&select=id`);
+          if (check && check.length > 0) {
+            showError('❌ Suppression échouée — politiques RLS Supabase manquantes. Voir README.');
+            return;
+          }
+
           if (selectedGroupId === id) {
             selectedGroupId = null; selectedGroupCode = null;
             document.getElementById('membersSection').classList.remove('visible');
