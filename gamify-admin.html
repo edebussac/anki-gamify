@@ -480,8 +480,8 @@
       const members = await api('GET', `users?group_id=eq.${selectedGroupId}&order=xp_total.desc`);
       if (!members.length) { el.innerHTML = '<div class="empty">Aucun membre pour l\'instant.</div>'; return; }
 
-      function xpForLevel(lvl) { return lvl <= 1 ? 0 : (lvl-1)*(290+5*lvl)/2; }
-      function xpToNext(lvl)   { return 150 + 5*(lvl-1); }
+      function xpForLevel(lvl) { return lvl <= 1 ? 0 : (lvl-1)*(290+5*lvl); }
+      function xpToNext(lvl)   { return 300 + 10*(lvl-1); }
 
       const medals = ['🥇','🥈','🥉'];
       el.innerHTML = `
